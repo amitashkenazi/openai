@@ -13,6 +13,8 @@ def data_embedding(embeddings_utils, model='text-embedding-ada-002'):
     print("getting embedding")
     df_faq['answer_embedding'] = df_faq["answer"].apply(lambda x : embeddings_utils.get_embedding(x, engine = model))
     df_faq['question_embedding'] = df_faq["question"].apply(lambda x : embeddings_utils.get_embedding(x, engine = model))
+    # print dataframe as a table
+    print(df_faq)
     print("saving pickle")
     # save df_faq to pickle
     with open('data/df_faq.pickle', 'wb') as handle:
