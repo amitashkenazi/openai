@@ -18,7 +18,6 @@ global_user_context = {"content": []}
 
 messages_history = []
 
-
 def chat(model, model_embedding):
     """
     This function facilitates an interactive chat session between a user and a 
@@ -29,7 +28,6 @@ def chat(model, model_embedding):
     The conversation's history is maintained in session variables, 
     allowing the model to generate contextually relevant responses.
     """
-    print("chat")
     max_tokens = st.slider('max tokens',100,4000)
     temperature = st.slider('temperature',0.0,1.0)
     
@@ -73,8 +71,6 @@ def chat(model, model_embedding):
                     message(st.session_state["embedding_answers"][i], key=str(i) + '_embedding')
                 message(st.session_state["generated"][i], key=str(i))
                 message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')  
-
-
 
 def generate_gpt_chat(prompt,model='gpt-35-turbo', model_embedding='text-embedding-ada-002', max_tokens=4000,temperature=0.5, agent_mode=False):
     """
@@ -172,12 +168,16 @@ model = st.text_input("select chat model",key='model', value='gpt-35-turbo')
 model_embedding = st.text_input("select chat model",key='model_embedding', value='text-embedding-ada-002')
     
 if st.button('Create Embeddings from FAQs', key='embeddings'): 
-    knowledge_management.data_embedding(embeddings_utils, model=model_embedding)
+    try:
+        knowledge_management.data_embedding(embeddings_utils, model=model_embedding)
+        st.text("Done")
+    except Exception as e:
+        st.text(e)
 
-
-
+# call chat function
 chat(model, model_embedding)
 
+# questions analytics
 if st.button('Questions Clustering', key='cluster'):
     # Display the plot using Streamlit
     fig, df, colors, num_clusters = analytics.analysis()
