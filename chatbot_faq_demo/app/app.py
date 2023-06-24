@@ -96,8 +96,10 @@ def generate_gpt_chat(prompt,model='gpt-35-turbo', model_embedding='text-embeddi
         messages.append({"role":"user","content":prompt})
         # messages.append({"role":"system","content":"Answer only questions that are related to Azure free account or AKS service. if the user asked a question that is not related to Azure free account or AKS service, apologize and ask the user to ask a different question or contact support"})  
     else:
-        print("FAQ mode")
+        print("FAQ embedding mode")
+        # search the knowledge base for answers
         answers = knowledge_management.search_faq(embeddings_utils, prompt, model=model_embedding)
+        # answers is a list of prioritized answers from the FAQ database
         answers_string = ""
         for idx, answer in enumerate(answers['answer']):
             answers_string += f"""{idx}. {answer}"""
@@ -124,7 +126,6 @@ def generate_gpt_chat(prompt,model='gpt-35-turbo', model_embedding='text-embeddi
         messages.append({"role":"user","content":prompt})
         # messages.append({"role":"system","content":"Answer only questions that are related to Azure free account or AKS service. if the user asked a question that is not related to Azure free account or AKS service, apologize and ask the user to ask a different question or contact support"})
     print(f"messages for the chatbot: {messages}")
-    print(f"model: {model}")
     response = openai.ChatCompletion.create(
         engine=model,
         messages = messages,
