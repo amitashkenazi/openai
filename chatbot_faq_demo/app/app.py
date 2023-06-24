@@ -102,10 +102,16 @@ def generate_gpt_chat(prompt,model='gpt-35-turbo', model_embedding='text-embeddi
         for idx, answer in enumerate(answers['answer']):
             answers_string += f"""{idx}. {answer}"""
         if len(answers) == 0:
-            prompt = f"""The user input: '{prompt}'. If the user did not ask anything, respond and encourage him to share his problem. if the user asked a question, We could not find any answers in the database. please appologize and ask the user to ask a different question or contact support"""
+            prompt = f"""The user input: '{prompt}'. 
+            If the user did not ask anything, respond and encourage him to share his problem. 
+            if the user asked a question, We could not find any answers in the database. 
+            Please appologize and ask the user to ask a different question or contact support"""
         else:
-            prompt = f"""The user input: {prompt}. If the user did not ask anything, respond and encourage him to share his problem. if the user asked a question, The relevant answers are: 
-            {answers_string}. combine the answers to a single answer and return it to the user. use only the facts in the answers and do not add any new information"""
+            prompt = f"""The user input: {prompt}. 
+            If the user did not ask anything, respond and encourage him to share his problem. 
+            if the user asked a question, I found the following prioritized answers in the FAQ database: 
+            {answers_string}. combine the answers from the FAQ database to a single answer for the user. 
+            use only the facts in the answers from the database and do not add any new information"""
         system_message = get_system_message()
         few_shots_string = ""
         for few_shot in get_few_shots():
